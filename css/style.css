@@ -62,15 +62,32 @@ body {
 
 a {
 	color: var(--foreground);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 50px;
-	height: 50px;
 	margin: 25px;
 	font-size: 50px;
 	text-decoration: none;
 	transition: .5s;
+	text-align: center;
+	width: 90px;
+}
+
+a span {
+	display: block;
+	font-size: 15px;
+}
+
+a img {
+	width: 50px;
+	height: 50px;
+}
+a svg {
+	width: 50px;
+	height: 50px;
+}
+a:hover svg {
+	fill: var(--accent)
+}
+a {
+	fill: var(--foreground)
 }
 
 .big-icons {
@@ -182,8 +199,8 @@ a {
 	}
 
 	a {
-		width: 40px;
-		height: 40px;
+		width: 80px;
+		height: 80px;
 		margin: 20px;
 		font-size: 40px;
 	}

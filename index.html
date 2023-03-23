@@ -4,9 +4,11 @@
 <head>
 	<title>null</title>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="icon" href="bookmark.png">
 	<base target="_blank">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
@@ -75,28 +77,17 @@
 				</button>
 			</form>
 		</div>
-		<div class="main">
-			<a href="https://twitter.com/">
-				<i class="fab fa-twitter"></i>
+		<div class="main" id="app">
+			<template v-for="monitor in monitors">
+				<a :href="monitor.url">
+					<img :src="'/assets/' + getIconName(monitor)" class="injectable"></img>
+					<span>{{monitor.friendly_name}}</span>
+				</a>
+			</template>
+			<a>
+				<i class="fas fa-router"></i>
 			</a>
-			<a href="https://www.youtube.com/feed/subscriptions">
-				<i class="fab fa-youtube"></i>
-			</a>
-			<a href="https://mail.google.com/mail/ca/u/1/#inbox">
-				<i class="fas fa-inbox"></i>
-			</a>
-			<a href="https://columns.app/">
-				<i class="fas fa-columns"></i>
-			</a>
-			<a href="https://open.spotify.com/browse/featured">
-				<i class="fab fa-spotify"></i>
-			</a>
-			<a href="https://www.github.com/">
-				<i class="fab fa-github"></i>
-			</a>
-			<a href="https://www.reddit.com/">
-				<i class="fab fa-reddit"></i>
-			</a>
+			
 		</div>
 	</div>
 
@@ -105,7 +96,49 @@
 	<script src="js/weather.js"></script>
 	<script src="js/menu.js"></script>
 	<script src="js/header.js"></script>
+	<script src="js/svg-inject.min.js"></script>
 
+	<script>
+		const { createApp } = Vue
+
+		createApp({
+			data() {
+				return {
+					count: 0,
+					monitors: [],
+				}
+			},
+			created() {
+				fetch("https://api.uptimerobot.com/v2/getMonitors?api_key=ur2037227-efa72e8592c805dd8b48a5e9", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+
+				}).then((res) => res.json())
+					.then((json) => (this.monitors = json.monitors))
+					.catch((err) => (error.value = err))
+			},
+			updated(){
+				SVGInject(document.querySelectorAll("img.injectable"));
+			},
+			methods:{
+				getIconName(monitor){
+					var res = {
+						793979186: "authentik.svg",
+						793839966: "balvid.svg",
+						793824432: "nextcloud.svg",
+						793824453: "immich.svg",
+						793824438: "immich.svg",
+						793979179: "owncloud.svg",
+						793979183: "owncloud.svg",
+						793979187: "openwrt.svg",
+						793824461: "wireguard.svg",
+						793824457: "wireguard.svg"
+					}[monitor.id]
+					return res || "default.svg"
+				}
+			},
+		}).mount('#app')
+	</script>
 </body>
 
 </html>
